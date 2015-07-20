@@ -46,7 +46,7 @@ class KindEditor extends InputWidget {
             'uploadJson' => Url::to(['Kupload', 'action' => 'uploadJson']),
             'width' => '100%',
             'height' => '400',
-                //'langType' => (strtolower(Yii::$app->language) == 'en-us') ? 'en' : 'zh_cn',//kindeditor支持一下语言：en,zh_CN,zh_TW,ko,ar
+            //'langType' => (strtolower(Yii::$app->language) == 'en-us') ? 'en' : 'zh_cn',//kindeditor支持一下语言：en,zh_CN,zh_TW,ko,ar
         ];
         $this->clientOptions = ArrayHelper::merge($this->_options, $this->clientOptions);
         parent::init();
@@ -58,25 +58,19 @@ class KindEditor extends InputWidget {
             switch ($this->editorType) {
                 case 'uploadButton':
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id, 'readonly' => "readonly"]) . '<input type="button" id="uploadButton" value="Upload" />';
-
                     break;
                 case 'colorpicker':
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="colorpicker" value="打开取色器" />';
-
                     break;
-            case 'file-manager':
+                case 'file-manager':
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="filemanager" value="浏览服务器" />';
-
                     break;
-             case 'image-dialog':
+                case 'image-dialog':
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="imageBtn" value="选择图片" />';
-
                     break;
-             case 'file-dialog':
+                case 'file-dialog':
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="insertfile" value="选择文件" />';
-
                     break;
-                
                 default:
                      return Html::activeTextarea($this->model, $this->attribute, ['id' => $this->id]);
                     break;
@@ -90,18 +84,17 @@ class KindEditor extends InputWidget {
                 case 'colorpicker':
                     return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="colorpicker" value="打开取色器" />';
                     break;
-            case 'file-manager':
+                case 'file-manager':
                     return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="filemanager" value="浏览服务器" />';
                     break;
-             case 'image-dialog':
-                    return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="imageBtn" value="选择图片" />';
+                case 'image-dialog':
+                    return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="imgbtn-'.$this->id.'" value="选择图片" />';
                     break;
-             case 'file-dialog':
+                case 'file-dialog':
                     return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="insertfile" value="选择文件" />';
                     break;
-                
                 default:
-                     return Html::textarea($this->id, $this->value, ['id' => $this->id]);
+                    return Html::textarea($this->id, $this->value, ['id' => $this->id]);
                     break;
             }
             
@@ -123,11 +116,11 @@ class KindEditor extends InputWidget {
                 $url =Url::to(['Kupload', 'action' => 'uploadJson','dir'=>'file']);
                
                 $script = <<<EOT
-                             KindEditor.ready(function(K) {
+            KindEditor.ready(function(K) {
 				var uploadbutton = K.uploadbutton({
 					button : K('#uploadButton')[0],
 					fieldName : 'imgFile',
-                                        url : '{$url}',
+                    url : '{$url}',
 					afterUpload : function(data) {
 						if (data.error === 0) {
 							var url = K.formatUrl(data.url, 'absolute');
@@ -149,7 +142,7 @@ EOT;
                 break;
             case 'colorpicker':
                 $script = <<<EOT
-                            KindEditor.ready(function(K) {
+            KindEditor.ready(function(K) {
 				var colorpicker;
 				K('#colorpicker').bind('click', function(e) {
 					e.stopPropagation();
@@ -184,9 +177,8 @@ EOT;
                 break;
             case 'file-manager':
                 $script = <<<EOT
-                           KindEditor.ready(function(K) {
+            KindEditor.ready(function(K) {
 				var editor = K.editor({
-                                      
 					fileManagerJson : '{$fileManagerJson}'
 				});
 				K('#filemanager').click(function() {
@@ -207,23 +199,22 @@ EOT;
                 break;
             case 'image-dialog':
                 $script = <<<EOT
-                          KindEditor.ready(function(K) {
+            KindEditor.ready(function(K) {
 				var editor = K.editor({
 					allowFileManager : true,
-                                        "uploadJson":"{$uploadJson}",
-                                         "fileManagerJson":"{$fileManagerJson}",
-                                        
+                    "uploadJson":"{$uploadJson}",
+                    "fileManagerJson":"{$fileManagerJson}",
 				});
-				K('#imgbtn{$this->id}').click(function() {
+				K('#imgbtn-{$this->id}').click(function() {
 					editor.loadPlugin('image', function() {
 						editor.plugin.imageDialog({
 							imageUrl : K('#{$this->id}').val(),
 							clickFn : function(url, title, width, height, border, align) {
 								K('#{$this->id}').val(url);
 								
-								arr = url.split("?");
-								picID = arr[1];
-								$(e.target).prev().val(picID);
+								arr{$this->id} = url.split("?");
+								pic{$this->id} = arr{$this->id}[1];
+								$(e.target).prev().val(pic{$this->id});
 								if ('img' == $(e.target).prev().prev().attr('type')) {
 									$(e.target).prev().hide();
 									$(e.target).prev().prev().attr('src', url);
@@ -241,12 +232,11 @@ EOT;
                 break;
             case 'file-dialog':
                 $script = <<<EOT
-                          KindEditor.ready(function(K) {
+            KindEditor.ready(function(K) {
 				var editor = K.editor({
 					allowFileManager : true,
-                                        "uploadJson":"{$uploadJson}",
-                                         "fileManagerJson":"{$fileManagerJson}",
-                                        
+                    "uploadJson":"{$uploadJson}",
+                    "fileManagerJson":"{$fileManagerJson}",
 				});
 				K('#insertfile').click(function() {
 					editor.loadPlugin('insertfile', function() {
