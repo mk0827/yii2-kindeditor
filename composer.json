@@ -1,0 +1,22 @@
+{
+    "name": "mkui/kindeditor",
+    "description": "kindeditor编辑器",
+    "license": "BSD-3-Clause",
+    "type": "yii2-extension",
+    "authors": [
+        {
+            "name": "Rootkit",
+            "email": "290147164@qq.com",
+            "homepage":"#"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "php": ">=5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "mkui\\kindeditor\\":""
+        }
+    }
+}
