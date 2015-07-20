@@ -66,7 +66,7 @@ class KindEditor extends InputWidget {
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="filemanager" value="浏览服务器" />';
                     break;
                 case 'image-dialog':
-                    return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="imageBtn" value="选择图片" />';
+                    return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="imgbtn-'.$this->id.'" value="选择图片" />';
                     break;
                 case 'file-dialog':
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="insertfile" value="选择文件" />';
@@ -205,6 +205,8 @@ EOT;
                     "uploadJson":"{$uploadJson}",
                     "fileManagerJson":"{$fileManagerJson}",
 				});
+                var arr-{$this->id} = [];
+                var pic-{$this->id};
 				K('#imgbtn-{$this->id}').click(function() {
 					editor.loadPlugin('image', function() {
 						editor.plugin.imageDialog({
@@ -212,9 +214,9 @@ EOT;
 							clickFn : function(url, title, width, height, border, align) {
 								K('#{$this->id}').val(url);
 								
-								arr{$this->id} = url.split("?");
-								pic{$this->id} = arr{$this->id}[1];
-								$(e.target).prev().val(pic{$this->id});
+								arr-{$this->id} = url.split("?");
+								pic-{$this->id} = arr-{$this->id}[1];
+								$(e.target).prev().val(pic-{$this->id});
 								if ('img' == $(e.target).prev().prev().attr('type')) {
 									$(e.target).prev().hide();
 									$(e.target).prev().prev().attr('src', url);
