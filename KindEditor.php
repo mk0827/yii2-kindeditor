@@ -66,7 +66,10 @@ class KindEditor extends InputWidget {
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="filemanager" value="浏览服务器" />';
                     break;
                 case 'image-dialog':
-                    return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="imgbtn-'.$this->id.'" value="选择图片" />';
+//                    return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="img'.$this->id.'" value="选择图片" />';
+                    return "<img id='thumb-img-$this->id' type='img' src='http://stc.weimob.com//img/template/lib/home-300200.jpg' style='max-height:100px;' />
+                            <input type='hidden' id='thumb-$this->id' name='$this->name' value='' class='input-medium' data-rule-url='true' />
+                            <a id='img-$this->id' class='btn insertimage'>选择图片</a>";
                     break;
                 case 'file-dialog':
                     return Html::activeInput('text', $this->model, $this->attribute, ['id' => $this->id]) . '<input type="button" id="insertfile" value="选择文件" />';
@@ -88,7 +91,10 @@ class KindEditor extends InputWidget {
                     return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="filemanager" value="浏览服务器" />';
                     break;
                 case 'image-dialog':
-                    return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="imgbtn-'.$this->id.'" value="选择图片" />';
+//                    return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="img'.$this->id.'" value="选择图片" />';
+                    return "<img id='thumb_img_$this->id' type='img' src='http://stc.weimob.com//img/template/lib/home-300200.jpg' style='max-height:100px;' />
+                            <input type='hidden' id='thumb-$this->id' name='$this->name' value='' class='input-medium' data-rule-url='true' />
+                            <a id='img-$this->id' class='btn insertimage'>选择图片</a>";
                     break;
                 case 'file-dialog':
                     return Html::input('text', $this->id, $this->value, ['id' => $this->id]) . '<input type="button" id="insertfile" value="选择文件" />';
@@ -117,147 +123,145 @@ class KindEditor extends InputWidget {
                
                 $script = <<<EOT
             KindEditor.ready(function(K) {
-				var uploadbutton = K.uploadbutton({
-					button : K('#uploadButton')[0],
-					fieldName : 'imgFile',
+                var uploadbutton = K.uploadbutton({
+                    button : K('#uploadButton')[0],
+                    fieldName : 'imgFile',
                     url : '{$url}',
-					afterUpload : function(data) {
-						if (data.error === 0) {
-							var url = K.formatUrl(data.url, 'absolute');
-							K('#{$this->id}').val(url);
-						} else {
-							alert(data.message);
-						}
-					},
-					afterError : function(str) {
-						alert('自定义错误信息: ' + str);
-					}
-				});
-				uploadbutton.fileBox.change(function(e) {
-					uploadbutton.submit();
-				});
-			});
+                    afterUpload : function(data) {
+                        if (data.error === 0) {
+                            var url = K.formatUrl(data.url, 'absolute');
+                            K('#{$this->id}').val(url);
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    afterError : function(str) {
+                        alert('自定义错误信息: ' + str);
+                    }
+                });
+                uploadbutton.fileBox.change(function(e) {
+                    uploadbutton.submit();
+                });
+            });
 EOT;
 
                 break;
             case 'colorpicker':
                 $script = <<<EOT
             KindEditor.ready(function(K) {
-				var colorpicker;
-				K('#colorpicker').bind('click', function(e) {
-					e.stopPropagation();
-					if (colorpicker) {
-						colorpicker.remove();
-						colorpicker = null;
-						return;
-					}
-					var colorpickerPos = K('#colorpicker').pos();
-					colorpicker = K.colorpicker({
-						x : colorpickerPos.x,
-						y : colorpickerPos.y + K('#colorpicker').height(),
-						z : 19811214,
-						selectedColor : 'default',
-						noColor : '无颜色',
-						click : function(color) {
-							K('#{$this->id}').val(color);
-							colorpicker.remove();
-							colorpicker = null;
-						}
-					});
-				});
-				K(document).click(function() {
-					if (colorpicker) {
-						colorpicker.remove();
-						colorpicker = null;
-					}
-				});
-			});
+                var colorpicker;
+                K('#colorpicker').bind('click', function(e) {
+                    e.stopPropagation();
+                    if (colorpicker) {
+                        colorpicker.remove();
+                        colorpicker = null;
+                        return;
+                    }
+                    var colorpickerPos = K('#colorpicker').pos();
+                    colorpicker = K.colorpicker({
+                        x : colorpickerPos.x,
+                        y : colorpickerPos.y + K('#colorpicker').height(),
+                        z : 19811214,
+                        selectedColor : 'default',
+                        noColor : '无颜色',
+                        click : function(color) {
+                            K('#{$this->id}').val(color);
+                            colorpicker.remove();
+                            colorpicker = null;
+                        }
+                    });
+                });
+                K(document).click(function() {
+                    if (colorpicker) {
+                        colorpicker.remove();
+                        colorpicker = null;
+                    }
+                });
+            });
 EOT;
 
                 break;
             case 'file-manager':
                 $script = <<<EOT
             KindEditor.ready(function(K) {
-				var editor = K.editor({
-					fileManagerJson : '{$fileManagerJson}'
-				});
-				K('#filemanager').click(function() {
-					editor.loadPlugin('filemanager', function() {
-						editor.plugin.filemanagerDialog({
-							viewType : 'VIEW',
-							dirName : 'image',
-							clickFn : function(url, title) {
-								K('#{$this->id}').val(url);
-								editor.hideDialog();
-							}
-						});
-					});
-				});
-			});
+                var editor = K.editor({
+                    fileManagerJson : '{$fileManagerJson}'
+                });
+                K('#filemanager').click(function() {
+                    editor.loadPlugin('filemanager', function() {
+                        editor.plugin.filemanagerDialog({
+                            viewType : 'VIEW',
+                            dirName : 'image',
+                            clickFn : function(url, title) {
+                                K('#{$this->id}').val(url);
+                                editor.hideDialog();
+                            }
+                        });
+                    });
+                });
+            });
 EOT;
 
                 break;
             case 'image-dialog':
                 $script = <<<EOT
             KindEditor.ready(function(K) {
-				var editor = K.editor({
-					allowFileManager : true,
+                var arr = [];
+                var pic;
+                var editor = K.editor({
+                    allowFileManager : true,
                     "uploadJson":"{$uploadJson}",
                     "fileManagerJson":"{$fileManagerJson}",
-				});
-                var arr-{$this->id} = [];
-                var pic-{$this->id};
-				K('#imgbtn-{$this->id}').click(function() {
-					editor.loadPlugin('image', function() {
-						editor.plugin.imageDialog({
-							imageUrl : K('#{$this->id}').val(),
-							clickFn : function(url, title, width, height, border, align) {
-								K('#{$this->id}').val(url);
-								
-								arr-{$this->id} = url.split("?");
-								pic-{$this->id} = arr-{$this->id}[1];
-								$(e.target).prev().val(pic-{$this->id});
-								if ('img' == $(e.target).prev().prev().attr('type')) {
-									$(e.target).prev().hide();
-									$(e.target).prev().prev().attr('src', url);
-									$(e.target).prev().prev().show();
-								}
-								
-								editor.hideDialog();
-							}
-						});
-					});
-				});
-			});
+                });
+                K('#img-{$this->id}').click(function(e) {
+                    editor.loadPlugin('image', function() {
+                        editor.plugin.imageDialog({
+                            imageUrl : $(e.target).prev().val(),
+                            clickFn : function(url, title, width, height, border, align) {                              
+                                arr = url.split("?");
+                                pic = arr[1];
+                                $(e.target).prev().val(pic);
+                                if ('img' == $(e.target).prev().prev().attr('type')) {
+                                    $(e.target).prev().hide();
+                                    $(e.target).prev().prev().attr('src', url);
+                                    $(e.target).prev().prev().show();
+                                }
+                                
+                                editor.hideDialog();
+                            }
+                        });
+                    });
+                });
+            });
 EOT;
 
                 break;
             case 'file-dialog':
                 $script = <<<EOT
             KindEditor.ready(function(K) {
-				var editor = K.editor({
-					allowFileManager : true,
+                var editor = K.editor({
+                    allowFileManager : true,
                     "uploadJson":"{$uploadJson}",
                     "fileManagerJson":"{$fileManagerJson}",
-				});
-				K('#insertfile').click(function() {
-					editor.loadPlugin('insertfile', function() {
-						editor.plugin.fileDialog({
-							fileUrl : K('#{$this->id}').val(),
-							clickFn : function(url, title) {
-								K('#{$this->id}').val(url);
-								editor.hideDialog();
-							}
-						});
-					});
-				});
-			});
+                });
+                K('#insertfile').click(function() {
+                    editor.loadPlugin('insertfile', function() {
+                        editor.plugin.fileDialog({
+                            fileUrl : K('#{$this->id}').val(),
+                            clickFn : function(url, title) {
+                                K('#{$this->id}').val(url);
+                                editor.hideDialog();
+                            }
+                        });
+                    });
+                });
+            });
 EOT;
 
                 break;
             default:
                 $script = "KindEditor.ready(function(K) {
-	K.create('#" . $this->id . "', " . $clientOptions . ");
+    K.create('#" . $this->id . "', " . $clientOptions . ");
 });";
                 break;
         }
@@ -266,5 +270,3 @@ EOT;
     }
 
 }
-
-?>
