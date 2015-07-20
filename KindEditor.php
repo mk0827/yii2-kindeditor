@@ -41,6 +41,7 @@ class KindEditor extends InputWidget {
      */
     public function init() {
         $this->id = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->id;
+        $this->name = $this->hasModel() ? Html::getInputName($this->model, $this->attribute) : $this->name;
         $this->_options = [
             'fileManagerJson' => Url::to(['Kupload', 'action' => 'fileManagerJson']),
             'uploadJson' => Url::to(['Kupload', 'action' => 'uploadJson']),
