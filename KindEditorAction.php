@@ -1,10 +1,5 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of KindEditorAction
  *
@@ -12,7 +7,6 @@
  * @link #
  * @QQ 290147164
  * @date 2015-3-4
-
  */
 
 namespace mkui\kindeditor;
@@ -20,7 +14,7 @@ namespace mkui\kindeditor;
 use Yii;
 use yii\base\Action;
 use yii\helpers\ArrayHelper;
-use pjkui\kindeditor\Services_JSON;
+use mkui\kindeditor\Services_JSON;
 
 class KindEditorAction extends Action {
 
@@ -37,37 +31,37 @@ class KindEditorAction extends Action {
     public $save_url;
     public $max_size;
 
-    //public $save_path;
+    // public $save_path;
     public function init() {
-        //close csrf
+        // close csrf
         Yii::$app->request->enableCsrfValidation = false;
-        //默认设置
+        // 默认设置
 
-       // $this->php_path =  dirname(__FILE__) . '/';
+        // $this->php_path =  dirname(__FILE__) . '/';
         $this->php_path =  $_SERVER['DOCUMENT_ROOT'] . '/';
         $this->php_url =  '/';
-//根目录路径，可以指定绝对路径，比如 /var/www/attached/
+        // 根目录路径，可以指定绝对路径，比如 /var/www/attached/
         $this->root_path = $this->php_path . 'upload/';
-//根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
+        // 根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
         $this->root_url = $this->php_url . 'upload/';
-//图片扩展名
-//            $ext_arr = ['gif', 'jpg', 'jpeg', 'png', 'bmp'],
-//文件保存目录路径
+        // 图片扩展名
+        // $ext_arr = ['gif', 'jpg', 'jpeg', 'png', 'bmp'],
+        // 文件保存目录路径
         $this->save_path = $this->php_path . 'upload/';
-//文件保存目录URL
+        // 文件保存目录URL
         $this->save_url = $this->php_url . 'upload/';
-//定义允许上传的文件扩展名
-//            $ext_arr = array(
-//                'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
-//                'flash' => array('swf', 'flv'),
-//                'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
-//                'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
-//            ),
-//最大文件大小
+        // 定义允许上传的文件扩展名
+        // $ext_arr = array(
+        //    'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
+        //    'flash' => array('swf', 'flv'),
+        //    'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
+        //    'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
+        // ),
+        // 最大文件大小
         $this->max_size = 1000000;
         $this->save_path = realpath($this->save_path) . '/';
 
-        //load config file
+        // load config file
 
         parent::init();
     }
@@ -127,10 +121,10 @@ class KindEditorAction extends Action {
      */
     public function fileManagerJsonAction() {
 
-//图片扩展名
+        // 图片扩展名
         $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 
-//目录名
+        // 目录名
         $dir_name = empty($_GET['dir']) ? '' : trim($_GET['dir']);
         if (!in_array($dir_name, array('', 'image', 'flash', 'media', 'file'))) {
             echo "Invalid Directory name.";
@@ -144,7 +138,7 @@ class KindEditorAction extends Action {
             }
         }
 
-//根据path参数，设置各路径和URL
+        // 根据path参数，设置各路径和URL
         if (empty($_GET['path'])) {
             $current_path = realpath($root_path) . '/';
             $current_url = $root_url;
@@ -156,27 +150,27 @@ class KindEditorAction extends Action {
             $current_dir_path = $_GET['path'];
             $moveup_dir_path = preg_replace('/(.*?)[^\/]+\/$/', '$1', $current_dir_path);
         }
-//echo realpath($this->root_path);
-//排序形式，name or size or type
+        // echo realpath($this->root_path);
+        //排序形式，name or size or type
         $order = empty($_GET['order']) ? 'name' : strtolower($_GET['order']);
 
-//不允许使用..移动到上一级目录
+        //不允许使用..移动到上一级目录
         if (preg_match('/\.\./', $current_path)) {
             echo 'Access is not allowed.';
             exit;
         }
-//最后一个字符不是/
+        //最后一个字符不是/
         if (!preg_match('/\/$/', $current_path)) {
             echo 'Parameter is not valid.';
             exit;
         }
-//目录不存在或不是目录
+        //目录不存在或不是目录
         if (!file_exists($current_path) || !is_dir($current_path)) {
             echo 'Directory does not exist.';
             exit;
         }
 
-//遍历目录取得文件信息
+        //遍历目录取得文件信息
         $file_list = array();
         if ($handle = opendir($current_path)) {
             $i = 0;
@@ -206,30 +200,28 @@ class KindEditorAction extends Action {
             closedir($handle);
         }
 
-  
-
         usort($file_list, [$this,'cmp_func']);
 
         $result = array();
-//相对于根目录的上一级目录
+        //相对于根目录的上一级目录
         $result['moveup_dir_path'] = $moveup_dir_path;
-//相对于根目录的当前目录
+        //相对于根目录的当前目录
         $result['current_dir_path'] = $current_dir_path;
-//当前目录的URL
+        //当前目录的URL
         $result['current_url'] = $current_url;
-//文件数
+        //文件数
         $result['total_count'] = count($file_list);
-//文件列表数组
+        //文件列表数组
         $result['file_list'] = $file_list;
 
-//输出JSON字符串
+        //输出JSON字符串
         header('Content-type: application/json; charset=UTF-8');
         $json = new Services_JSON();
         echo $json->encode($result);
     }
 
     public function UploadJosnAction() {
-//定义允许上传的文件扩展名
+        //定义允许上传的文件扩展名
         $ext_arr = array(
             'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
             'flash' => array('swf', 'flv'),
@@ -237,8 +229,7 @@ class KindEditorAction extends Action {
             'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
         );
 
-
-//PHP上传失败
+        //PHP上传失败
         if (!empty($_FILES['imgFile']['error'])) {
             switch ($_FILES['imgFile']['error']) {
                 case '1':
@@ -269,7 +260,7 @@ class KindEditorAction extends Action {
             $this->alert($error);
         }
 
-//有上传文件时
+        //有上传文件时
         if (empty($_FILES) === false) {
             //原文件名
             $file_name = $_FILES['imgFile']['name'];
@@ -340,17 +331,13 @@ class KindEditorAction extends Action {
             echo $json->encode(array('error' => 0, 'url' => $file_url));
             exit;
         }
-
-      
-
     }
-    public   function alert($msg) {
-            header('Content-type: text/html; charset=UTF-8');
-            $json = new Services_JSON();
-            echo $json->encode(array('error' => 1, 'message' => $msg));
-            exit;
-        }
+
+    public function alert($msg) {
+        header('Content-type: text/html; charset=UTF-8');
+        $json = new Services_JSON();
+        echo $json->encode(array('error' => 1, 'message' => $msg));
+        exit;
+    }
 
 }
-
-?>

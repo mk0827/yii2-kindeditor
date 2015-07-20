@@ -7,7 +7,6 @@
  * @link #
  * @QQ 290147164
  * @date 2015-3-4
- 
  */
 
 namespace mkui\kindeditor;
