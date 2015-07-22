@@ -163,8 +163,7 @@ class KindEditorController extends Controller
         $result['file_list'] = $file_list;
         //输出JSON字符串
         header('Content-type: application/json; charset=UTF-8');
-        echo json_encode($result);
-        Yii::$app->end();
+        return $result;
     }
 
     /**
@@ -281,8 +280,7 @@ class KindEditorController extends Controller
             @chmod($file_path, 0644);
             $file_url = $save_url . $new_file_name;
             header('Content-type: text/html; charset=UTF-8');
-            echo json_encode(array('error' => 0, 'url' => $file_url));
-            Yii::$app->end();
+            return array('error' => 0, 'url' => $file_url);
         }
     }
 
