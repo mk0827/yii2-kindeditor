@@ -223,6 +223,9 @@ class KindEditorController extends Controller
             $tmp_name = $_FILES['imgFile']['tmp_name'];
             //文件大小
             $file_size = $_FILES['imgFile']['size'];
+            //文件MD5，SHA1值
+            $file_md5 = md5_file($tmp_name);
+            $file_sha1 = sha1_file($tmp_name);
             //检查文件名
             if (!$file_name) {
                 $this->alert("请选择文件。");
@@ -280,7 +283,7 @@ class KindEditorController extends Controller
             @chmod($file_path, 0644);
             $file_url = $save_url . $new_file_name;
             header('Content-type: text/html; charset=UTF-8');
-            return array('error' => 0, 'url' => $file_url);
+            return array('error' => 0, 'url' => $file_url, 'md5' => $file_md5, 'sha1' => $file_sha1);
         }
     }
 
