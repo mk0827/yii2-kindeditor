@@ -283,7 +283,7 @@ class KindEditorController extends Controller
             @chmod($file_path, 0644);
             $file_url = $save_url . $new_file_name;
             header('Content-type: text/html; charset=UTF-8');
-            return array('error' => 0, 'url' => $file_url, 'md5' => $file_md5, 'sha1' => $file_sha1);
+            return array('error' => 0, 'url' => $file_url, 'md5' => $file_md5, 'sha1' => $file_sha1, 'save_url' => $save_url);
         }
     }
 
