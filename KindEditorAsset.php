@@ -1,11 +1,11 @@
 <?php
-namespace cliff363825\kindeditor;
+namespace mkui\kindeditor;
 
 use yii\web\AssetBundle;
 
 class KindEditorAsset extends AssetBundle
 {
-    public $sourcePath = '@cliff363825/kindeditor/assets';
+    public $sourcePath = '@mkui/kindeditor/assets';
     public $js = [];
     public $css = [
         'themes/default/default.css',

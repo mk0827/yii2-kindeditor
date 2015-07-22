@@ -1,13 +1,13 @@
 {
-    "name": "cliff363825/yii2-kindeditor",
-    "description": "KindEditor Widget for Yii2",
+    "name": "mkui/kindeditor",
+    "description": "kindeditor编辑器",
     "type": "yii2-extension",
     "keywords": ["yii2","kindeditor"],
     "license": "MIT",
     "authors": [
         {
-            "name": "cliff363825",
-            "email": "cliff_363825@163.com"
+            "name": "Rootkit",
+            "email": "tekadmin@163.com"
         }
     ],
     "require": {
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "cliff363825\\kindeditor\\": ""
+            "mkui\\kindeditor\\": ""
         }
     }
 }

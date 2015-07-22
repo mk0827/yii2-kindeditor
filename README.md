@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist cliff363825/yii2-kindeditor "*"
+php composer.phar require --prefer-dist mkui/yii2-kindeditor "*"
 ```
 
 or add
 
 ```
-"cliff363825/yii2-kindeditor": "*"
+"mkui/yii2-kindeditor": "*"
 ```
 
 to the require section of your `composer.json` file.
@@ -28,7 +28,7 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 
 ```php
-<?= \cliff363825\kindeditor\KindEditorWidget::widget([
+<?= \mkui\kindeditor\KindEditorWidget::widget([
     'name' => 'content',
     'options' => [], // html attributes
     'clientOptions' => [
@@ -44,7 +44,7 @@ Once the extension is installed, simply use it in your code by  :
 or use with a model:
 
 ```php
-<?= \cliff363825\kindeditor\KindEditorWidget::widget([
+<?= \mkui\kindeditor\KindEditorWidget::widget([
     'model' => $model,
     'attribute' => 'content',
     'options' => [], // html attributes

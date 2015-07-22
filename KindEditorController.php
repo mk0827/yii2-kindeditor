@@ -1,6 +1,6 @@
 <?php
 
-namespace cliff363825\kindeditor;
+namespace mkui\kindeditor;
 
 use Yii;
 use yii\web\Controller;

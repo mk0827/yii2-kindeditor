@@ -1,7 +1,7 @@
 <?php
-namespace cliff363825\kindeditor\controllers;
+namespace mkui\kindeditor\controllers;
 
-use cliff363825\kindeditor\KindEditorController;
+use mkui\kindeditor\KindEditorController;
 
 class KindEditorBaseController extends KindEditorController
 {

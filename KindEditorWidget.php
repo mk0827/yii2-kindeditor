@@ -1,5 +1,5 @@
 <?php
-namespace cliff363825\kindeditor;
+namespace mkui\kindeditor;
 
 use Yii;
 use yii\helpers\Html;
@@ -265,7 +265,7 @@ EOT;
                 break;
         }
 
-        $view->registerJsFile($asset->baseUrl . '/lang/' . $this->clientOptions['langType'] . '.js', ['depends' => '\cliff363825\kindeditor\KindEditorAsset']);
+        $view->registerJsFile($asset->baseUrl . '/lang/' . $this->clientOptions['langType'] . '.js', ['depends' => '\mkui\kindeditor\KindEditorAsset']);
         $js = "
 KindEditor.ready(function(K) {
     {$preJs};
