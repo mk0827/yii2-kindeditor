@@ -349,7 +349,7 @@ class KindEditorController extends Controller
     public function getSubDir()
     {
         if ($this->_subDir === null) {
-            $this->_subDir = date('Ym/d');
+            $this->_subDir = date('Ymd');
         }
         return rtrim($this->_subDir, "\\/");
     }
