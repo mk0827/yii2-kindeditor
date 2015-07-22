@@ -168,9 +168,11 @@ class KindEditorController extends Controller
 
     /**
      * File Upload Action
+     * @param $files
+     * @return array
      * @throws \yii\base\ExitException
      */
-    public function actionUpload()
+    public function actionUpload($files)
     {
         //文件保存目录路径
         $save_path = $this->getUploadPath();
@@ -185,8 +187,6 @@ class KindEditorController extends Controller
         );
         //最大文件大小
         $max_size = $this->getMaxSize();
-
-        $files = $this->getValidFile($_FILES);
 
         //有上传文件时
         if (empty($files) === false) {
@@ -290,7 +290,7 @@ class KindEditorController extends Controller
                 default:
                     $error = '未知错误。';
             }
-            $this->alert($error);
+            return array('error' => 1, 'message' => $error);
         }
         //有上传文件时
         if (empty($files) === false) {
@@ -298,6 +298,7 @@ class KindEditorController extends Controller
             $tmp_name = $files['imgFile']['tmp_name'];
             //文件MD5，SHA1值
             $arr = [
+                'error' => 0,
                 'md5'   => md5_file($tmp_name),
                 'sha1'  => sha1_file($tmp_name)
             ];
