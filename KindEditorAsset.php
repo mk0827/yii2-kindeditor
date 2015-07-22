@@ -1,33 +1,26 @@
 <?php
-
-/**
- * Description of KindEditorAsset
- * 
- * @author Rootkit <Rootkit, 290147164@qq.com>
- * @link #
- * @QQ 290147164
- * @date 2015-3-4
- */
-namespace mkui\kindeditor;
+namespace cliff363825\kindeditor;
 
 use yii\web\AssetBundle;
 
-class KindEditorAsset extends AssetBundle {
-    //put your code here
-    public $js=[
-        'kindeditor-min.js',
-        'lang/zh_cn.js',
-       // 'kindeditor.js'
-    ];
-     public $css=[
-        'themes/default/default.css'
-    ];
-    public $jsOptions=[
-        'charset'=>'utf8',
+class KindEditorAsset extends AssetBundle
+{
+    public $sourcePath = '@cliff363825/kindeditor/assets';
+    public $js = [];
+    public $css = [
+        'themes/default/default.css',
     ];
 
-    public function init() {
-        //资源所在目录
-        $this->sourcePath = dirname(__FILE__) . DIRECTORY_SEPARATOR ;
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        if (YII_DEBUG) {
+            $this->js[] = 'kindeditor.js';
+        } else {
+            $this->js[] = 'kindeditor-min.js';
+        }
     }
 }
