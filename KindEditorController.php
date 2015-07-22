@@ -185,47 +185,20 @@ class KindEditorController extends Controller
         );
         //最大文件大小
         $max_size = $this->getMaxSize();
-        //PHP上传失败
-        if (!empty($_FILES['imgFile']['error'])) {
-            switch ($_FILES['imgFile']['error']) {
-                case '1':
-                    $error = '超过php.ini允许的大小。';
-                    break;
-                case '2':
-                    $error = '超过表单允许的大小。';
-                    break;
-                case '3':
-                    $error = '图片只有部分被上传。';
-                    break;
-                case '4':
-                    $error = '请选择图片。';
-                    break;
-                case '6':
-                    $error = '找不到临时目录。';
-                    break;
-                case '7':
-                    $error = '写文件到硬盘出错。';
-                    break;
-                case '8':
-                    $error = 'File upload stopped by extension。';
-                    break;
-                case '999':
-                default:
-                    $error = '未知错误。';
-            }
-            $this->alert($error);
-        }
+
+        $files = $this->getValidFile($_FILES);
+
         //有上传文件时
-        if (empty($_FILES) === false) {
+        if (empty($files) === false) {
             //原文件名
-            $file_name = $_FILES['imgFile']['name'];
+            $file_name = $files['name'];
             //服务器上临时文件名
-            $tmp_name = $_FILES['imgFile']['tmp_name'];
+            $tmp_name = $files['tmp_name'];
             //文件大小
-            $file_size = $_FILES['imgFile']['size'];
+            $file_size = $files['size'];
             //文件MD5，SHA1值
-            $file_md5 = md5_file($tmp_name);
-            $file_sha1 = sha1_file($tmp_name);
+            $file_md5 = $files['md5'];
+            $file_sha1 = $files['sha1'];
             //检查文件名
             if (!$file_name) {
                 $this->alert("请选择文件。");
@@ -283,7 +256,53 @@ class KindEditorController extends Controller
             @chmod($file_path, 0644);
             $file_url = $save_url . $new_file_name;
             header('Content-type: text/html; charset=UTF-8');
-            return array('error' => 0, 'url' => $file_url, 'md5' => $file_md5, 'sha1' => $file_sha1, 'save_url' => $save_url);
+            return array('error' => 0, 'url' => $file_url, 'md5' => $file_md5, 'sha1' => $file_sha1, 'save_url' => $save_url, 'save_name' => $new_file_name);
+        }
+    }
+
+    public function getValidFile($files)
+    {
+        //PHP上传失败
+        if (!empty($files['imgFile']['error'])) {
+            switch ($files['imgFile']['error']) {
+                case '1':
+                    $error = '超过php.ini允许的大小。';
+                    break;
+                case '2':
+                    $error = '超过表单允许的大小。';
+                    break;
+                case '3':
+                    $error = '图片只有部分被上传。';
+                    break;
+                case '4':
+                    $error = '请选择图片。';
+                    break;
+                case '6':
+                    $error = '找不到临时目录。';
+                    break;
+                case '7':
+                    $error = '写文件到硬盘出错。';
+                    break;
+                case '8':
+                    $error = 'File upload stopped by extension。';
+                    break;
+                case '999':
+                default:
+                    $error = '未知错误。';
+            }
+            $this->alert($error);
+        }
+        //有上传文件时
+        if (empty($files) === false) {
+            //服务器上临时文件名
+            $tmp_name = $files['imgFile']['tmp_name'];
+            //文件MD5，SHA1值
+            $arr = [
+                'md5'   => md5_file($tmp_name),
+                'sha1'  => sha1_file($tmp_name)
+            ];
+
+            return array_merge($files['imgFile'], $arr);
         }
     }
 
