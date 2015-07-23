@@ -208,8 +208,6 @@ EOT;
                 break;
             case 'imageDialog':
                 $preJs = <<<EOT
-                var arr = [];
-                var pic;
                 var editor = K.editor({
                     allowFileManager : true,
                     "uploadJson":"{$uploadJson}",
@@ -220,9 +218,7 @@ EOT;
                         editor.plugin.imageDialog({
                             imageUrl : $(e.target).prev().val(),
                             clickFn : function(url, title, width, height, border, align) {
-                                arr = url.split("?");
-                                pic = arr[1];
-                                $(e.target).prev().val(pic);
+                                $(e.target).prev().val(url);
                                 if ('img' == $(e.target).prev().prev().attr('type')) {
                                     $(e.target).prev().hide();
                                     $(e.target).prev().prev().attr('src', url);
