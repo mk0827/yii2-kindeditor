@@ -53,6 +53,11 @@ class KindEditorWidget extends InputWidget
      * fileDialog:文件上传
      */
     public $editorType = 'textEditor';
+    /**
+     * 默认图片
+     * @var string
+     */
+    public $defaultImg = 'http://stc.weimob.com//img/template/lib/home-300200.jpg';
 
     public function init(){
         parent::init();
@@ -79,8 +84,9 @@ class KindEditorWidget extends InputWidget
                         return Html::activeInput('text', $this->model, $this->attribute, $this->options) . '<input type="button" id="filemanager" value="浏览服务器" />';
                         break;
                     case 'imageDialog':
-                        return "<img id='thumb-img-$this->id' type='img' src='http://stc.weimob.com//img/template/lib/home-300200.jpg' style='max-height:100px;' />
-                            <input type='hidden' id='thumb-$this->id' name='$this->name' value='' class='input-medium' data-rule-url='true' />
+                        $value = $this->model->isNewRecord ? $this->defaultImg : Html::getAttributeValue($this->model, $this->attribute);
+                        return "<img id='thumb-img-$this->id' type='img' src='$value' style='max-height:100px;' />
+                            <input type='hidden' id='thumb-$this->id' name='$this->name' value='$value' class='input-medium' data-rule-url='true' />
                             <a id='img-$this->id' class='btn insertimage'>选择图片</a>";
                         break;
                     case 'fileDialog':
@@ -102,7 +108,8 @@ class KindEditorWidget extends InputWidget
                         return Html::input('text', $this->id, $this->value, $this->options) . '<input type="button" id="filemanager" value="浏览服务器" />';
                         break;
                     case 'imageDialog':
-                        return "<img id='thumb_img_$this->id' type='img' src='http://stc.weimob.com//img/template/lib/home-300200.jpg' style='max-height:100px;' />
+                        $value = $this->model->isNewRecord ? get_params('UPLOAD_DEFAULT_IMG') : Html::getAttributeValue($this->model, $this->attribute);
+                        return "<img id='thumb_img_$this->id' type='img' src='$value' style='max-height:100px;' />
                             <input type='hidden' id='thumb-$this->id' name='$this->name' value='' class='input-medium' data-rule-url='true' />
                             <a id='img-$this->id' class='btn insertimage'>选择图片</a>";
                         break;
